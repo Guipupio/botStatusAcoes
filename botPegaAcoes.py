@@ -2,7 +2,7 @@
 """
 Created on Wed Feb 20 21:46:34 2019
 
-@author: Gabriel Bonani
+@author: Guilherme Pupio
 """
 
 import xlwings as xw
