@@ -4,17 +4,13 @@ Created on Wed May 1 10:22:34 2019
 
 @author: Guilherme Pupio
 """
-from tkinter import filedialog, Tk
-from os import getcwd as curPath
+
 from selenium import webdriver
 import pandas
 
-def initBrowser(url:str):
-    # Gera browser
-    browser = webdriver.Chrome(executable_path=curPath() + r'/chromedriver')
-    # Acessa link contendo links para as empresas
-    browser.get(url)
-    return browser
+from util import initBrowser
+
+
     
 
 def obtem_dict_FII(browser):
@@ -49,3 +45,4 @@ if __name__ == "__main__":
     # Gera Browser
     browser= initBrowser(url= r'https://fiis.com.br/lista-por-codigo/')
     codigo_FIIs = obtem_dict_FII(browser)
+    

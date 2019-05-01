@@ -12,6 +12,7 @@ from selenium import webdriver
 from string import ascii_uppercase as letrasAlfabeto
 from datetime import datetime
 from time import sleep
+from util import get_path_janela_dialogo, initBrowser
 
 def completaExcel(browser, sht, sht2 = None):
     linha = 2
@@ -134,11 +135,7 @@ def getNomeLink(browser, sht ):
 
 def navegacao(file: str):
 
-    # Gera browser
-    browser = webdriver.Chrome(executable_path=r'C:\Users\Gui Pupio\Desktop\Pessoal\python' + r'\chromedriver.exe')
-    # Acessa link contendo links para as empresas
-    browser.get('http://www.b3.com.br/pt_br/produtos-e-servicos/negociacao/renda-variavel/empresas-listadas.htm')
-    
+    browser = initBrowser(url = 'http://www.b3.com.br/pt_br/produtos-e-servicos/negociacao/renda-variavel/empresas-listadas.htm')
     # Mudamos de iframe
     browser.switch_to.frame('bvmf_iframe')
     # Clicamos para aparecer todas as acoes
@@ -160,15 +157,8 @@ def navegacao(file: str):
 
         
 if __name__ == "__main__":
-    UpLevel = Tk()
-    UpLevel.withdraw()
     
-    #files que serão compactados - Todos devem ter a extensão '.xlsx'
-    baseFile = filedialog.askopenfilename(initialdir = curPath(),title = "Selecione o arquivo referente à base")
-   
-    #Destroi o tkinter gerado acima..
-    UpLevel.destroy()    
-    
+    baseFile = get_path_janela_dialogo(initialdir = curPath(),title = "Selecione o arquivo referente à base")    
     navegacao(file= baseFile)
     
     

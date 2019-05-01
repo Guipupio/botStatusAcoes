@@ -8,31 +8,14 @@ Created on Mon Apr  1 18:53:34 2019
 import xlwings as xw
 from tkinter import filedialog, Tk
 from os import getcwd as curPath
-from selenium import webdriver
-from string import ascii_uppercase as letrasAlfabeto
-from datetime import datetime
-from time import sleep
+from util import insereTextoLento, initBrowser, login_rico
+from getpass import getpass
 
-def insereTextoLento(browser: webdriver.Chrome, xpath_texto: str, texto: str):
-    browser.find_element_by_xpath(xpath_texto).clear()
-
-    # Inserimos os caracteres com Delay, pq o site nao reconhece quando escrevemos muito rapido
-    for char in texto:
-        browser.find_element_by_xpath(xpath_texto).send_keys(char)
-        sleep(0.08)
-    sleep(2.5)
-
-def navegacao(file: str):
-
-    # Gera browser
-    browser = webdriver.Chrome(executable_path=r'C:\Users\Gui Pupio\Desktop\Pessoal\python' + r'\chromedriver.exe')
-    
+def navegacao(file: str):    
     # Acessa link contendo links para as empresas
-    browser.get(r'https://www.rico.com.vc/login/')
-    insereTextoLento(browser, r'//*[@id="loginForm"]/div[1]/input', 'gpupio')
-    browser.find_element_by_xpath(r'//*[@id="loginForm"]/button').submit()
-    insereTextoLento(browser, r'//*[@id="login-component"]/div/div[2]/div/div[1]/div/form/div[1]/input', '')
-    
+    browser = initBrowser(r'https://www.rico.com.vc/login/')
+    login = 'gpupio'
+    login_rico(browser=browser, user=login, password= getpass())    
     
     browser.get(r'https://www.rico.com.vc/dashboard/acoes/')
     campo_busca = browser.find_element_by_xpath(r'/html/body/section/div/div[2]/div/div/section/div[6]/div[2]/form/div[1]/div[1]/div/div/input')
