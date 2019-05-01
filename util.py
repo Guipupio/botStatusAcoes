@@ -11,7 +11,7 @@ from os import getcwd as curPath
 from tkinter import filedialog, Tk
 from getpass import getpass
 
-def login_rico(browser, user:str, password=getpass()):
+def login_rico(browser, user:str, password:str):
     """
     INPUT: 
         browser: webdriver.Chrome
