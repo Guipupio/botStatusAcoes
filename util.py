@@ -11,7 +11,8 @@ from os import getcwd as curPath
 from tkinter import filedialog, Tk
 from getpass import getpass
 
-def login_rico(browser, user:str, password:str):
+
+def login_rico(browser, user: str, password: str):
     """
     INPUT: 
         browser: webdriver.Chrome
@@ -22,18 +23,21 @@ def login_rico(browser, user:str, password:str):
     browser.find_element_by_xpath(r'//*[@id="loginForm"]/button').submit()
     # Aguarda 5 segundos a pagina renderizar
     sleep(5)
-    #Obtem Botoes de senha
+    # Obtem Botoes de senha
     botoes = browser.find_elements_by_class_name('btn-blue-xlight')
     if len(botoes) != 6:
-        raise ErroLoginRico("Provavelmete Houve alteracoes na forma de Login. Verifique!")
+        raise ErroLoginRico(
+            "Provavelmete Houve alteracoes na forma de Login. Verifique!")
     for digito in password:
         for botao in botoes:
             if digito in botao.text:
                 botao.click()
                 continue
-    browser.find_element_by_xpath(r'//*[@id="login-component"]/div/div[2]/div/div[1]/div/form/button').submit() 
-            
-def get_path_janela_dialogo(initPath = None, multiplos_arquivos= False, titulo='Selecione o arquivo'):
+    browser.find_element_by_xpath(
+        r'//*[@id="login-component"]/div/div[2]/div/div[1]/div/form/button').submit()
+
+
+def get_path_janela_dialogo(initPath=None, multiplos_arquivos=False, titulo='Selecione o arquivo'):
     """
     INPUT:
         initPath (opcional): Define diretorio que a janela sera aberta
@@ -47,23 +51,25 @@ def get_path_janela_dialogo(initPath = None, multiplos_arquivos= False, titulo='
     """
     UpLevel = Tk()
     UpLevel.withdraw()
-    parametros ={}
-    if initPath:  
+    parametros = {}
+    if initPath:
         parametros['initialdir'] = initPath
     if titulo:
         parametros['title'] = titulo
-    
+
     if multiplos_arquivos:
-        baseFile = filedialog.askopenfilenames(initialdir = curPath(),title = titulo)  
+        baseFile = filedialog.askopenfilenames(
+            initialdir=curPath(), title=titulo)
     else:
-        baseFile = filedialog.askopenfilename(initialdir = curPath(),title = titulo)
-    
-    #Destroi o tkinter gerado acima..
+        baseFile = filedialog.askopenfilename(
+            initialdir=curPath(), title=titulo)
+
+    # Destroi o tkinter gerado acima..
     UpLevel.destroy()
     return baseFile
-        
-    
-def initBrowser(url:str, chromeDriverPath=curPath() + r'/chromedriver'):
+
+
+def initBrowser(url: str, chromeDriverPath=curPath() + r'/chromedriver'):
     """
     INPUT:
         url (str): Pagina que o browser deve abrir
@@ -75,7 +81,8 @@ def initBrowser(url:str, chromeDriverPath=curPath() + r'/chromedriver'):
     browser.get(url)
     return browser
 
-def insereTextoLento(browser: webdriver.Chrome, xpath_texto: str, texto: str, delay_escrita = 0.08, delay_retorno = 2.5):
+
+def insereTextoLento(browser: webdriver.Chrome, xpath_texto: str, texto: str, delay_escrita=0.08, delay_retorno=2.5):
     """
     INPUT:
         browser: webdriver.Chrome
@@ -90,7 +97,6 @@ def insereTextoLento(browser: webdriver.Chrome, xpath_texto: str, texto: str, de
         browser.find_element_by_xpath(xpath_texto).send_keys(char)
         sleep(delay_escrita)
     sleep(delay_retorno)
-    
 
 
 class ErroLoginRico(Exception):
