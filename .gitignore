@@ -1,1 +1,4 @@
 *.pyc
+.vscode/settings.json
+.gitignore
+Notas.txt
