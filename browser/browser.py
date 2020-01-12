@@ -30,20 +30,28 @@ class Browser(webdriver.Chrome):
             sleep(delay_escrita)
         sleep(delay_retorno)
 
-    def existejQueryNaPagina(self) -> bool:
-        CRIACAO_FUNCAO_GET_JQUERY = """
+    def constroiFuncaoNaPagina(self, nome: str, corpo_funcao: str, parametros_str: str ='') -> None:
+        assert all([map(lambda parametro: type(parametro) is str, [nome, corpo_funcao, parametros_str])]), "ERRO: TODOS os parametros devem ser 'strings'!"
+
+        BASE_FUNCAO = """
             var script = document.createElement('script');
-            script.text = 'function get_jquery_selenium(){ \
-                try { \
-                    return jQuery.fn.jquery \
-                } \
-                catch(err){ \
-                    return "ERRO" \
-                } \
-            }';
+            script.text = 'function {nome}({parametros_str}){{ \\
+                {corpo_funcao} \\
+                }}'; 
             document.getElementsByTagName('head')[0].appendChild(script);
         """
-        self.execute_script(CRIACAO_FUNCAO_GET_JQUERY)
+        # Adiciona metodo ao JS da pagina
+        self.execute_script(BASE_FUNCAO.format(nome=nome, corpo_funcao=corpo_funcao, parametros_str=parametros_str))
+
+    def existejQueryNaPagina(self) -> bool:
+        VERSAO_JQUERY = \
+            """try { \\
+                return jQuery.fn.jquery \\
+            } \\
+            catch(err){ \\
+                return "ERRO" \\
+            }"""
+        self.constroiFuncaoNaPagina(nome='get_jquery_selenium', corpo_funcao=VERSAO_JQUERY)
 
         SENTENCA_JQUERY = "return get_jquery_selenium()"
 
@@ -61,3 +69,18 @@ class Browser(webdriver.Chrome):
         document.getElementsByTagName('head')[0].appendChild(script); 
         """
         self.execute_script(SENTENCA_JQUERY)
+    
+    def get_element_length_by_jquery(self, jquery_element: str) -> int:
+        return self.execute_script("""return $("{elemento}").length """.format(elemento=jquery_element))
+
+    def enviaComandoParaElemento(self, jquery_element: str, posicao: int ='', comando: str =''):
+        if posicao is not '':
+            assert type(posicao) is int, """ERRO: type(posicao) deve ser 'INT', não '{tipo}'""".format(tipo=type(posicao))
+            posicao = [posicao]
+        
+        if comando is not '':
+            assert type(comando) is str, """ERRO: type(comando) deve ser 'str', não '{comando}'""".format(tipo=type(comando))
+            comando = '.' + comando
+        
+        return self.execute_script("""return $("{jquery_element}"){posicao}{comando}""".format(jquery_element=jquery_element, posicao=posicao, comando=comando))
+    
