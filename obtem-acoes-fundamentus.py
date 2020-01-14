@@ -1,9 +1,10 @@
+from datetime import datetime
 from os.path import exists
 from time import sleep
 
+from numpy import resize
 from pandas import DataFrame as DF
 from pandas import read_csv
-from numpy import resize
 
 from browser.browser import Browser
 
@@ -103,10 +104,13 @@ if __name__ == '__main__':
     try:
         dict_infos = vasculha_setores(browser, tabela_id='resultado')
         df_info = DF(dict_infos)
-        df_info.to_csv('busca_12_01_2020.csv', sep=';', decimal=',', float_format="%.6f")
+        str_agora = datetime.now().strftime("%d_%m_%Y")
+        df_info.to_csv('base_csv/relatorio_' + str_agora + '.csv', sep=';', decimal=',', float_format="%.6f")
 
 
     except Exception as erro:
         print(erro)
+    
+    finally:
         browser.close()
         browser.quit()
