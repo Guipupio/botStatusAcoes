@@ -15,7 +15,7 @@ from getpass import getpass
 def navegacao(file: str):
     # Acessa link contendo links para as empresas
     browser = initBrowser(r'https://www.rico.com.vc/login/')
-    login = 'gpupio'
+    login = input('Usuario: ')
     login_rico(browser=browser, user=login, password=getpass())
 
     browser.get(r'https://www.rico.com.vc/dashboard/acoes/')
