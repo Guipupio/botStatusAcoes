@@ -40,16 +40,20 @@ def analisa_fiis(path_to_csv: str):
     if  isqrt_num_setores ** 2 != num_setores:
         num_plots_vertical += 1
     
+    plt.style.use('dark_background')
     # Gera subplot das dimensoes necessarias
-    fig, subplots = plt.subplots(num_plots_vertical, num_plots_horizontal,  figsize=(20,10), dpi=200)
+    fig, subplots = plt.subplots(num_plots_vertical, num_plots_horizontal,  figsize=(30,20), dpi=400)
     
     for idx, setor in enumerate(list_setores):
         
         # Filtra por setor
         _df = df_filtrado[df_filtrado.setor == setor]
+
+        # Remove os FIIs com P/VPA muito grandes
+        _df = _df[_df['p/vpa'] < 20]
         
         # obtem dados do Setor
-        y = _df['dy (12m)\nmédia']
+        y = _df['dy (12m)\nmédia'] * 100
         x = _df['p/vpa']
 
         # Define indices do subplot
@@ -59,13 +63,18 @@ def analisa_fiis(path_to_csv: str):
         # Plota FIIs
         subplots[idx_v][idx_h].scatter(x, y)
 
+        # Adiciona nome dos FIIs
+        for codigo, _x, _y in zip(_df['código\ndo fundo'], x, y):
+            subplots[idx_v][idx_h].annotate(codigo, (_x,_y), fontsize=5, fontstretch=1000, color=(0.3, 0.3,0.3), rotation=45, ha='left', rotation_mode='anchor')
+
         # Labels do subplot
         subplots[idx_v][idx_h].set_title(setor)
         subplots[idx_v][idx_h].set_xlabel("P/VPA")
-        subplots[idx_v][idx_h].set_ylabel("DY (12M) Médio")
-        
-    fig.tight_layout(pad=3.0)
+        subplots[idx_v][idx_h].set_ylabel("% DY (12M) Médio")
+    
+    fig.tight_layout(pad=2.5)
     fig.suptitle('Análise FIIs por Setores', fontsize=16)
     
-    fig.savefig("Analise.png")
+    fig.savefig(f"Analise-{path_to_csv.split('/')[-1][:-4]}.png")
+    
     plt.show()
