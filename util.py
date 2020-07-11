@@ -5,12 +5,16 @@ Created on Mon May  1 12:53:34 2019
 @author: Gui Pupio
 """
 
-from selenium import webdriver
-from time import sleep
-from os import getcwd as curPath
-from tkinter import filedialog, Tk
 from getpass import getpass
+from os import getcwd as curPath
+from time import sleep
+from tkinter import Tk, filedialog
 
+from selenium import webdriver
+
+from platform import system as sistema_operacional
+
+SEP_DIR = '/' if sistema_operacional().lower() == 'linux' else '\\'
 
 def login_rico(browser, user: str, password: str):
     """

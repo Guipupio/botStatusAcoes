@@ -1,16 +1,16 @@
 from os import getcwd as curPath
-from platform import system as sistema_operacional
 from time import sleep
 
 from numpy import resize
 from selenium import webdriver
 
 from browser.utils import string2float
+from util import SEP_DIR, sistema_operacional
 
 
 class ChromeBrowser(webdriver.Chrome):
 
-    def __init__(self, chromeDriverPath = curPath() + '/chromedriver/' + sistema_operacional().lower() + r'/chromedriver', *args, **kwargs) -> webdriver.Chrome:
+    def __init__(self, chromeDriverPath = SEP_DIR.join([curPath(), 'chromedriver', sistema_operacional().lower(), 'chromedriver']), *args, **kwargs) -> webdriver.Chrome:
         """
             INPUT:
                 chromeDriverPath (str): Path ate o chromedriver, Default: path atual

@@ -3,7 +3,8 @@ from datetime import datetime
 from os import getcwd as pwd
 from os import listdir
 
-from fundsExplorer.manager import analisa_fiis, generate_csv_current_data
+from fundsExplorer.manager import plota_fiis, generate_csv_current_data
+from util import SEP_DIR
 
 parser = ArgumentParser()
 
@@ -20,15 +21,15 @@ parser.add_argument("-q", "--quiet",
 if __name__ == '__main__':
     args = parser.parse_args()
     
-    PATH_FIIS = '/'.join([pwd(), 'csvs', 'fiis'])
+    PATH_FIIS = SEP_DIR.join([pwd(), 'csvs', 'fiis'])
     filename = datetime.now().strftime("%Y-%m-%d")
 
     if args.get_fiis:
         # Gera CSV dos dados do FundsExplorer
-        generate_csv_current_data(path_save_csv=f"{PATH_FIIS}/{filename}.csv")
+        generate_csv_current_data(path_save_csv=f"{PATH_FIIS}{SEP_DIR}{filename}.csv")
 
     if args.plot_analise_fiis is not None:
         filenames = listdir(PATH_FIIS)
         filenames.sort()
 
-        analisa_fiis(f"{PATH_FIIS}/{filenames[args.plot_analise_fiis]}")
+        plota_fiis(f"{PATH_FIIS}{SEP_DIR}{filenames[args.plot_analise_fiis]}")
