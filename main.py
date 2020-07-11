@@ -14,6 +14,9 @@ parser.add_argument("-gf", "--get-fiis", type=int, dest="get_fiis",
 parser.add_argument("-pf", "--plot-fiis", type=int, dest="plot_analise_fiis",
                     help="Plota grafico do indice passado. Ex: -1 plota ultimos dados obtidos (default: None)", metavar='', default=None)
 
+parser.add_argument("-auto-fit", "--auto-fit", type=int, dest="setor_auto_fit",
+                    help="Ajusta cada subplot isolamente sem considerar os demais. (default: 0)", metavar='', default=0)
+
 parser.add_argument("-q", "--quiet",
                     action="store_false", dest="verbose", default=True,
                     help="don't print status messages to stdout")
@@ -32,4 +35,4 @@ if __name__ == '__main__':
         filenames = listdir(PATH_FIIS)
         filenames.sort()
 
-        plota_fiis(f"{PATH_FIIS}{SEP_DIR}{filenames[args.plot_analise_fiis]}")
+        plota_fiis(f"{PATH_FIIS}{SEP_DIR}{filenames[args.plot_analise_fiis]}", setor_auto_fit=args.setor_auto_fit)
