@@ -17,6 +17,9 @@ parser.add_argument("-pf", "--plot-fiis", type=int, dest="plot_analise_fiis",
 parser.add_argument("-auto-fit", "--auto-fit", type=int, dest="setor_auto_fit",
                     help="Ajusta cada subplot isolamente sem considerar os demais. (default: 0)", metavar='', default=0)
 
+parser.add_argument("-only-mine", "--only-mine", type=int, dest="only_mine",
+                    help="Plota apenas os FIIs definidos em user.properties. (default: 0)", metavar='', default=0)
+
 parser.add_argument("-q", "--quiet",
                     action="store_false", dest="verbose", default=True,
                     help="don't print status messages to stdout")
@@ -35,4 +38,8 @@ if __name__ == '__main__':
         filenames = listdir(PATH_FIIS)
         filenames.sort()
 
-        plota_fiis(f"{PATH_FIIS}{SEP_DIR}{filenames[args.plot_analise_fiis]}", setor_auto_fit=args.setor_auto_fit)
+        plota_fiis(
+            path_to_csv=f"{PATH_FIIS}{SEP_DIR}{filenames[args.plot_analise_fiis]}",
+            setor_auto_fit=args.setor_auto_fit,
+            only_mine=args.only_mine,
+        )

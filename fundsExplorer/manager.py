@@ -36,7 +36,7 @@ def gera_cor_relativa_vacancia(vacancia: float) -> tuple:
         return (0.5, 0.5, 0.5, 1)        
 
 
-def plota_fiis(path_to_csv: str, setor_auto_fit = False):
+def plota_fiis(path_to_csv: str, setor_auto_fit = False, only_mine = False):
     # Obtem data Frame
     df = pd.read_csv(path_to_csv, na_values=np.nan)
     
@@ -52,6 +52,9 @@ def plota_fiis(path_to_csv: str, setor_auto_fit = False):
             'ativo': df_filtrado['código\ndo fundo'],
             'vacancia': df_filtrado['vacância\nfísica']
             })
+    
+    if only_mine:
+        df_filtrado = df_filtrado[df_filtrado.ativo.isin(DICT_USER_CONFIGS.get('MEUS_FIIS', []))]
     
     # Obtem os setores dos FIIS
     list_setores = list(filter(lambda x: type(x) is str, df_filtrado.setor.unique()))
@@ -115,8 +118,8 @@ def plota_fiis(path_to_csv: str, setor_auto_fit = False):
             if list_ativos:
                 df_aux = _df[_df.ativo.isin(list_ativos)]
                 preenche_subplot(subplots, idx_v, idx_h, df_aux['p/vpa'], df_aux.dy, df_aux, setor, label=label, **kwargs_subplot, **kwargs)
-        
     
+
     fig.tight_layout(pad=2.5)
     fig.suptitle('Análise FIIs por Setores', fontsize=14)
     
@@ -131,9 +134,12 @@ def preenche_subplot(subplots, idx_v: int, idx_h: int, x: iter, y: iter, _df, se
     for codigo, _x, _y in zip(_df['ativo'], x, y):
         subplots[idx_v][idx_h].annotate(codigo, (_x,_y), fontsize=5, fontstretch=1000, color=(0.9, 0.9, 0.9, 1), rotation=45, ha='left', rotation_mode='anchor')
     
+
     # Labels do subplot
     subplots[idx_v][idx_h].set_title(setor)
     subplots[idx_v][idx_h].set_xlabel("P/VPA")
     subplots[idx_v][idx_h].set_ylabel("% DY (12M) Médio")
+
+    # Range dos dados
     subplots[idx_v][idx_h].set_ylim(y_range)
     subplots[idx_v][idx_h].set_xlim(x_range)
