@@ -5,7 +5,7 @@ from numpy import resize
 from selenium import webdriver
 
 from browser.utils import string2float
-from util import SEP_DIR, sistema_operacional
+from constantes import SEP_DIR, sistema_operacional
 
 
 class ChromeBrowser(webdriver.Chrome):

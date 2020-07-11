@@ -4,7 +4,7 @@ from os import getcwd as pwd
 from os import listdir
 
 from fundsExplorer.manager import plota_fiis, generate_csv_current_data
-from util import SEP_DIR
+from constantes import SEP_DIR
 
 parser = ArgumentParser()
 

@@ -12,9 +12,6 @@ from tkinter import Tk, filedialog
 
 from selenium import webdriver
 
-from platform import system as sistema_operacional
-
-SEP_DIR = '/' if sistema_operacional().lower() == 'linux' else '\\'
 
 def login_rico(browser, user: str, password: str):
     """

@@ -5,7 +5,7 @@ import pandas as pd
 from matplotlib import pyplot as plt
 
 from browser.browsers import ChromeBrowser
-from util import SEP_DIR
+from constantes import DICT_USER_CONFIGS, SEP_DIR
 
 
 def generate_csv_current_data(path_save_csv: str = None) -> None:
@@ -91,17 +91,31 @@ def plota_fiis(path_to_csv: str, setor_auto_fit = False):
         # Filtra por setor
         _df = df_filtrado[df_filtrado.setor == setor]
 
-        # obtem dados do Setor
-        y = _df['dy']
-        x = _df['p/vpa']
-        nome_ativos = _df['ativo']
-
         # Define indices do subplot
         idx_v = int(idx/num_plots_horizontal)
         idx_h = idx % num_plots_horizontal
 
-        # Plota FIIs
-        preenche_subplot(subplots, idx_v, idx_h, x, y, _df, setor, nome_ativos, **kwargs_subplot)
+        # Obtem meus FIIs deste setor
+        meus_fiis = list(set(DICT_USER_CONFIGS.get('MEUS_FIIS', [])) & set(_df['ativo']))
+        nome_fiis = list(set(_df['ativo']) - set(meus_fiis))
+
+        dict_plots_especials = {
+            'Meus FIIs': {
+                'marker': '*',
+                'list_ativos': meus_fiis,
+                },
+            'FIIs': {
+                'marker': '.',
+                'list_ativos': nome_fiis,
+                }
+        }
+
+        for label, kwargs in dict_plots_especials.items():
+            list_ativos = kwargs.pop('list_ativos', [])
+            if list_ativos:
+                df_aux = _df[_df.ativo.isin(list_ativos)]
+                preenche_subplot(subplots, idx_v, idx_h, df_aux['p/vpa'], df_aux.dy, df_aux, setor, label=label, **kwargs_subplot, **kwargs)
+        
     
     fig.tight_layout(pad=2.5)
     fig.suptitle('Análise FIIs por Setores', fontsize=14)
@@ -109,14 +123,14 @@ def plota_fiis(path_to_csv: str, setor_auto_fit = False):
     fig.savefig(f"Analise-{path_to_csv.split(SEP_DIR)[-1][:-4]}.png")
 
 
-def preenche_subplot(subplots, idx_v: int, idx_h: int, x: iter, y: iter, _df, setor: str, nome_ativos: iter, x_range: tuple = None, y_range: tuple =  None):
+def preenche_subplot(subplots, idx_v: int, idx_h: int, x: iter, y: iter, _df, setor: str, label: iter, x_range: tuple = None, y_range: tuple =  None, marker: str = '.'):
     # Plota FIIs
-    subplots[idx_v][idx_h].scatter(x, y, c=_df.vacancia.apply(gera_cor_relativa_vacancia), label=nome_ativos)
-    # subplots[idx_v][idx_h].legend()
+    subplots[idx_v][idx_h].scatter(x, y, c=_df.vacancia.apply(gera_cor_relativa_vacancia), label=label, marker=marker)
+    subplots[idx_v][idx_h].legend()
     # Adiciona nome dos FIIs
     for codigo, _x, _y in zip(_df['ativo'], x, y):
         subplots[idx_v][idx_h].annotate(codigo, (_x,_y), fontsize=5, fontstretch=1000, color=(0.9, 0.9, 0.9, 1), rotation=45, ha='left', rotation_mode='anchor')
-
+    
     # Labels do subplot
     subplots[idx_v][idx_h].set_title(setor)
     subplots[idx_v][idx_h].set_xlabel("P/VPA")
