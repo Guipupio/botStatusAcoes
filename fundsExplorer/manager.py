@@ -59,7 +59,7 @@ def plota_fiis(path_to_csv: str, setor_auto_fit = False, only_mine = False):
     # Obtem os setores dos FIIS
     list_setores = list(filter(lambda x: type(x) is str, df_filtrado.setor.unique()))
     num_setores = len(list_setores)
-    isqrt_num_setores = math.isqrt(num_setores)
+    isqrt_num_setores = int(math.sqrt(num_setores))
 
     num_plots_vertical = num_plots_horizontal = isqrt_num_setores
     
