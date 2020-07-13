@@ -4,3 +4,5 @@
 Notas.txt
 *.csv
 *.png
+venv/*
+*.bat
