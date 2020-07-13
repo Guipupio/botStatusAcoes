@@ -3,11 +3,11 @@
 - Chrome versão 83.x
 
 ## Outras Versoes do Chrome
-- É atualize o chromeDriver instalado em ``chromedriver/<plataforma>/chromedriver`
+- Atualize o chromeDriver instalado em `chromedriver/plataforma/chromedriver`, conforme sua versao de Chrome
 > https://chromedriver.chromium.org/downloads
 
 ## Dependencias python
-- Instale os pacotes necessarios com
+- Instale os pacotes necessarios com:
 ```shell
 python -m pip install requirements.txt
 ```
