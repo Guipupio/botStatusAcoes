@@ -104,7 +104,7 @@ class ChromeBrowser(webdriver.Chrome):
 
         return _return
     
-    def obtem_headers_tabela(self, tabela_id: str) -> (list, int):
+    def obtem_headers_tabela(self, tabela_id: str) -> tuple:
         """
             Objetivo: Obter Headers da tabela 
 
@@ -146,7 +146,7 @@ class ChromeBrowser(webdriver.Chrome):
         if not list_texto_tabela:
             return {nome_info: [] for nome_info in list_table_headers}
         elif len(list_texto_tabela) > num_headers:
-            lista_ativos = resize(list_texto_tabela, (-1, num_headers))
+            lista_ativos = resize(list_texto_tabela, (int(len(list_texto_tabela)/num_headers), num_headers))
         else:
             lista_ativos = resize(list_texto_tabela, (1, num_headers))
 
